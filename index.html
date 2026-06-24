@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Tərlanın Saytı</title>
     <style>
-        body { margin: 0; background-color: white; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        header { background-color: #007BFF; color: white; padding: 25px; font-size: 28px; font-weight: bold; }
+        body { margin: 0; background-color: #0d1117; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        header { background-color: #161b22; color: white; padding: 20px; font-size: 28px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 15px; border-bottom: 2px solid #007BFF; }
+        .logo { height: 60px; border-radius: 8px; }
         .hero { margin-top: 40px; }
-        .btn { background-color: #007BFF; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-size: 20px; display: inline-block; margin: 10px; cursor: pointer; border: none; }
-        .friends-section { margin-top: 50px; color: #333; display: none; justify-content: space-around; padding: 20px; flex-wrap: wrap; }
+        .btn { background-color: #007BFF; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-size: 20px; display: inline-block; margin: 10px; cursor: pointer; border: none; transition: 0.3s; }
+        .btn:hover { background-color: #0056b3; }
+        .friends-section { margin-top: 50px; color: #c9d1d9; display: none; justify-content: space-around; padding: 20px; flex-wrap: wrap; }
         .list-box { width: 45%; text-align: left; }
-        h2 { border-bottom: 2px solid #007BFF; display: inline-block; }
+        h2 { border-bottom: 2px solid #007BFF; display: inline-block; padding-bottom: 5px; }
         
         @media (max-width: 600px) {
             .friends-section { flex-direction: column; }
@@ -20,7 +22,10 @@
 </head>
 <body>
 
-    <header>Tərlanın Saytı</header>
+    <header>
+        <img src="Gemini_Generated_Image_q0xu2uq0xu2uq0xu.png" alt="Loqo" class="logo">
+        Tərlanın Saytı
+    </header>
 
     <div class="hero">
         <h1>3D dünyasına xoş gəldiniz!</h1>
