@@ -19,19 +19,18 @@
     <header>Tərlanın Saytı</header>
 
     <div class="hero">
-        <h1>3D Dünyasına Xoş Gəlmisiniz</h1>
-        <p>Welcome To The 3D World</p>
-        <a href="3d.html" class="btn">3D Dünyasına Girmək</a>
+        <h1>3D dünyasına xoş gəldiniz!</h1>
+        <p>Welcome to the 3D World</p>
+        <a href="3d.html" class="btn">3D dünyasına giriş</a>
         <br>
-        <button class="btn" onclick="toggleFamily()" style="background-color: #64ffda;">Ailəmi Görmək Üçün</button>
-        <button class="btn" onclick="toggleFriends()" style="background-color: #ff9900;">Dostlarımı Görmək Üçün</button>
+        <button class="btn" onclick="toggleFamily()" style="background-color: #64ffda;">Ailəni göstər</button>
     </div>
 
     <div class="section" id="familySection">
         <div class="list-box">
             <h2>Ailə və Qohumlar</h2>
             <ol>
-                <li>Nigar(Anam)</li><li>İlqar(Atam)</li><li>Kənan(Qardaşım)</li><li>Şükran(Bacım)</li><li>Sənan(Qardaşım)</li><li>Rüfət(Əmim)</li><li>Afət(Bibim)</li><li>Hökümə(Qardaşımın Yoldaşı)</li>
+                li>Nigar(Anam)</li><li>İlqar(Atam)</li><li>Kənan(Qardaşım)</li><li>Şükran(Bacım)</li><li>Sənan(Qardaşım)</li><li>Rüfət(Əmim)</li><li>Afət(Bibim)</li><li>Hökümə(Qardaşımın Yoldaşı)</li>
                 <li>Xalidə(Nənəm)</li><li>Sabir(Babam)</li><li>Əsli(Nənəm)</li><li>Məhəmməd(Babam)</li><li>Əkbər(Babam)</li><li>Sayalı(Xalam)</li><li>Aynur(Xalam)</li>
                 <li>Süleyman(Dayım)</li><li>Ələkbər(Dayım)</li><li>Zəminə(Xalam D.D)</li><li>Aytən(Xalam D.D)</li><li>Nunuş(Xalam)</li><li>Emil(Dayım D.D)</li><li>Gülşən(Xalam Qızı)</li>
                 <li>Rəvan(Əmim Oğlu)</li><li>Xəyal(Xalam oğlu)</li><li>İslam(Xalam Oğlu)</li><li>Mələk(Dayım Qızı)</li><li>Fidan(Xalam Qızı)</li><li>Ayxan(Dayım Oğlu)</li><li>Ömər(Dayım Oğlu)</li>
@@ -40,29 +39,12 @@
         </div>
     </div>
 
-    <div class="section" id="friendsSection">
-        <div class="list-box">
-            <h2>Dostlar</h2>
-            <ol>
-                <li>Kərim Həsənli</li>
-            </ol>
-        </div>
-    </div>
-
     <script>
         function toggleFamily() {
             var section = document.getElementById("familySection");
-            var friends = document.getElementById("friendsSection");
-            friends.style.display = "none";
-            section.style.display = (section.style.display === "flex") ? "none" : "flex"; 
-        }
-
-        function toggleFriends() {
-            var section = document.getElementById("friendsSection");
-            var family = document.getElementById("familySection");
-            family.style.display = "none";
-            section.style.display = (section.style.display === "flex") ? "none" : "flex"; 
+            section.style.display = (section.style.display === "flex") ? "none" : "flex";
         }
     </script>
+
 </body>
 </html>
