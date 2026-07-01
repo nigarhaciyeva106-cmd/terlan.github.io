@@ -2,13 +2,13 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <title>Tərlanın Saytı // Cyber-Punk</title>
+    <title>Tərlanın Saytı</title>
     <style>
         body {
             margin: 0;
             background-color: #050505;
             color: #39FF14;
-            font-family: 'Courier New', monospace;
+            font-family: 'Segoe-UI', sans-serif;
             text-align: center;
             min-height: 100vh;
         }
@@ -23,6 +23,16 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             box-shadow: 0 0 15px #FF00FF;
+        }
+
+        h1 {
+            animation: glitch 1.5s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 #FF00FF, -2px 0 #39FF14; }
+            50% { text-shadow: -2px 0 #FF00FF, 2px 0 #39FF14; }
+            100% { text-shadow: 2px 0 #FF00FF, -2px 0 #39FF14; }
         }
 
         .hero {
@@ -42,19 +52,20 @@
             border: 2px solid #39FF14;
             transition: 0.3s;
             font-weight: bold;
-            box-shadow: 0 0 10px #39FF14;
+            animation: pulse 2s infinite;
         }
-        .btn:hover {
-            background-color: #39FF14;
-            color: #050505;
-            box-shadow: 0 0 30px #39FF14;
+
+        @keyframes pulse {
+             0% { box-shadow: 0 0 10px #39FF14; }
+             50% { box-shadow: 0 0 25px #39FF14; }
+             100% { box-shadow: 0 0 10px #39FF14; }
         }
 
         .section {
-            margin-top: 50px;
+            margin-top: 50px; 
             display: none;
             justify-content: center;
-            padding: 20px;
+            padding: 20px; 
         }
 
         .list-box {
@@ -67,7 +78,7 @@
         }
 
         h2 {
-            border-bottom: 2px solid #FF00FF;
+            border-bottom: 2px solid #FF00FF; 
             display: inline-block;
             padding-bottom: 5px;
             color: #FF00FF;
@@ -80,10 +91,10 @@
 
     <div class="hero">
         <h1>[3D Dünyasına Xoş Gəldiniz]</h1>
-        <p> Welcome To The 3D Matrix</p>
+        <p>Welcome To The 3D Matrix</p>
         <a href="3d.html" class="btn">PORTALA GİRİŞ</a>
         <br>
-        <button class="btn" onclick="toggleFamily()">Ailəmi Görmək Üçün</button>
+        <button class="btn" onclick="toggleFamily()">Ailəmi Görmək</button>
     </div>
 
     <div class="section" id="familySection">
