@@ -7,36 +7,32 @@
     <style>
         body {
             margin: 0;
-            background: linear-gradient(135deg, #03045E, #001a33, #020330);
-            color: #00B4D8;
+            background: linear-gradient(135deg, #03ffca, #8a76a4, #da0e7f);
+            color: #fff;
             font-family: 'Segoe UI', sans-serif;
             text-align: center;
             min-height: 100vh;
         }
 
         header {
-            background-color: rgba(3, 4, 94, 0.5);
-            color: #90E0EF;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #fff;
             padding: 30px;
             font-size: 32px;
             font-weight: bold;
-            border-bottom: 3px solid #00B4D8;
+            border-bottom: 3px solid #03ffca;
             text-transform: uppercase;
             letter-spacing: 5px;
-            box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+            box-shadow: 0 0 20px rgba(218, 14, 127, 0.5);
         }
 
         h1 {
-            color: #CAF0F8;
-            text-shadow: 0 0 10px #00B4D8;
-        }
-
-        .hero {
-            margin-top: 50px;
+            color: #fff;
+            text-shadow: 0 0 10px #03ffca;
         }
 
         .btn {
-            background: linear-gradient(45deg, #03045E, #0077B6);
+            background: linear-gradient(45deg, #8a76a4, #da0e7f);
             color: #fff;
             padding: 15px 30px;
             text-decoration: none;
@@ -47,14 +43,14 @@
             cursor: pointer;
             border: none;
             font-weight: bold;
-            box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
+            box-shadow: 0 0 15px rgba(218, 14, 127, 0.5);
             transition: 0.3s;
         }
 
         .btn:hover {
             transform: scale(1.1);
-            background: #CAF0F8;
-            color: #03045E;
+            background: #03ffca;
+            color: #000;
         }
 
         .section {
@@ -69,16 +65,16 @@
         .list-box {
             width: 80%;
             text-align: left;
-            background: rgba(3, 4, 94, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             padding: 30px;
-            border: 2px solid #00B4D8;
             border-radius: 20px;
+            border: 2px solid #03ffca;
         }
 
         h2 {
-            color: #CAF0F8;
-            border-bottom: 2px solid #00B4D8; 
+            color: #03ffca;
+            border-bottom: 2px solid #da0e7f;
             display: inline-block;
             padding-bottom: 5px;
         }
@@ -87,8 +83,6 @@
             header { font-size: 18px; padding: 15px; }
             .list-box { width: 90%; }
         }
-
-        <link rel="icon" type="image/png" href="favicon.png">
     </style>
 </head>
 <body>
@@ -97,7 +91,7 @@
 
     <div class="hero">
         <h1>[3D Məlumat Mərkəzi]</h1>
-        <p style="color: #90E0EF;">Sürətli və Təmiz Giriş</p>
+        <p>Sürətli və Təmiz Giriş</p>
         <a href="3d.html" class="btn">PORTALA GİRİŞ</a>
         <br>
         <button class="btn" onclick="toggleFamily()">Ailəmi Görmək</button>
@@ -107,9 +101,9 @@
         <div class="list-box">
             <h2>Ailə və Qohumlar</h2>
             <ol style="color: #eee;">
-                <li>Nigar(Anam)</li><li>İlqar(Atam)</li><li><span style="color: #00B4D8; font-weight: bold;">Kənan(Qardaşım)</span></li>
+                <li>Nigar(Anam)</li><li>İlqar(Atam)</li><li><span style="color: #03ffca; font-weight: bold;">Kənan(Qardaşım)</span></li>
                 <li>Şükran(Bacım)</li><li>Sənan(Qardaşım)</li><li>Afət(Bibim)</li><li>Hökümə</li><li>Gülzar(Nənəm)</li>
-                <li>Sabir(Babam)</li><li>Əsli(Nənəm)</li><li>Məhəmməd(Babam)</li><li>Əkbər(Babam)</li><li>Sayalı(Xalam)</li><li>Aynur(Xalam)</li>
+                <li>Sabir(Babam)</li><li>Əsli(Nənəm)</li><li>Məhəmməd(Babam)</li><li>Əkbər(Babam)</li><li>Yaqut(Nənəm)</li><li>Sayalı(Xalam)</li><li>Aynur(Xalam)</li>
                 <li>Süleyman(Dayım)</li><li>Ələkbər(Dayım)</li><li>Zəminə(Xalam D.D)</li><li>Aytən(Xalam D.D)</li><li>Nunuş(Xalam)</li><li>Emil(Dayım D.D)</li><li>Gülşən(Xalam Qızı)</li>
                 <li>Xəyal(Xalam oğlu)</li><li>İslam(Xalam Oğlu)</li><li>Mələk(Dayım Qızı)</li><li>Fidan(Xalam Qızı)</li><li>Ayxan(Dayım Oğlu)</li>
             </ol>
