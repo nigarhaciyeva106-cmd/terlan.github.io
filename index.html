@@ -1,126 +1,317 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tərlanın Saytı</title>
-    <style>
-        body {
-            margin: 0;
-            background: linear-gradient(135deg, #03ffca, #8a76a4, #da0e7f);
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tərlanın Saytı</title>
+<link rel="preconnect"  href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root{
+        --bg: #05030c;
+        --violet: #8b5cf6;
+        --cyan: #22d3ee;
+        --pink: #f472b6;
+        --text: #f2eefc;
+        --muted: #a89fc9;
+    }
+    *{box-sizing:border-box;}
+    html,body{
+        margin:0; padding:0; width:100%; height:100%; overflow:hidden;
+        background: var(--bg);
+        font-family:'Inter', sans-serif;
+        color: var(--text);
+    }
+    #bg-canvas{
+        position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; display:block;
+    }
+    .scene-wrap{
+        position:fixed; inset:0; z-index:1;
+        display:flex; align-items:center; justify-content:center;
+        perspective: 1400px;
+    }
+    header.hero{
+        position:fixed; top:0; left:0; width:100%; z-index:5;
+        text-align:center; padding: 28px 20px 0;
+        pointer-events:none;
+    }
+    .eyebrow{
+        font-family:'Orbitron', sans-serif;
+        font-size:11px; letter-spacing:5px; text-transform:uppercase;
+        color: var(--cyan);
+        opacity:.85;
+        margin:0 0 6px;
+    }
+    h1{
+        font-family:'Orbitron', sans-serif;
+        font-weight:900;
+        font-size: clamp(22px, 4.5vw, 42px);
+        margin:0;
+        background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--pink));
+        -webkit-background-clip:text;
+        color:transparent;
+        text-shadow: 0 0 40px rgba(139,92,246,.35);
+        letter-spacing:1px;
+        background-clip:text;
+    }
+    .sub{
+        font-size:13px; color:var(--muted); margin-top:8px; letter-spacing:.3px;
+    }
+    .orbit{
+        position:relative;
+        width: 1px; height: 1px;
+        transform-style: preserve-3d;
+        animation: spin 60s linear infinite;
+    }
+    .orbit.paused{ animation-play-state: paused; }
+    @keyframes spin{
+        from{ transform: rotateY(0deg); }
+        to{ transform: rotateY(360deg); }
+    }
+    .card{
+        position:absolute;
+        top:-46px; left:-72px;
+        width:144px; height:92px;
+        border-radius:14px;
+        background: linear-gradient(160deg, rgba(139,92,246,.16), rgba(34,211,238,.08));
+        border:1px solid rgba(168,159,201,.35);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        text-align:center;
+        padding:8px;
+        cursor:pointer;
+        pointer-events:all;
+        transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+        backface-visibility: hidden;
+    }
+    .card:hover{
+        border-color: var(--cyan);
+        box-shadow: 0 0 28px rgba(34,211,238,.45), 0 0 60px rgba(139,92,246,.25);
+        background: linear-gradient(160deg, rgba(139,92,246,.3), rgba(34,211,238,.18))
+    }
+    .card .name{
+        font-family:'Orbitron', sans-serif;
+        font-weight:700;
+        font-size:14px;
+        color: var(--text);
+        text-shadow: 0 0 12px rgba(255,255,255,.25);
+    }
+    .card .rel{
+        font-size:10.5px;
+        color: var(--muted);
+        margin-top:4px;
+        letter-spacing:.4px;
+    }
+    .card .dot{
+        width:6px; height:6px; border-radius:50%;
+        background: var(--pink);
+        box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
+        margin-bottom:6px;
+    }
 
-        header {
-            background-color: rgba(0, 0, 0, 0.3);
-            color: #fff;
-            padding: 30px;
-            font-size: 32px;
-            font-weight: bold;
-            border-bottom: 3px solid #03ffca;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            box-shadow: 0 0 20px rgba(218, 14, 127, 0.5);
-        }
+    .detail{
+        position:fixed; z-index:20; inset:0;
+        display:flex; align-items:center; justify-content:center;
+        background: rgba(2,1,8,.72);
+        backdrop-filter: blur(4px);
+        opacity:0; pointer-events:none;
+        transition: opacity .3s ease;
+    }
+    .detail.show{ opacity:1; pointer-events:all; }
+    .detail-card{
+        width:min(340px, 86vw);
+        border-radius:20px;
+        padding: 34px 28px;
+        text-align:center;
+        background: linear-gradient(160deg, rgba(139,92,246,.22), rgba(244,114,182,.1));
+        border:1px solid rgba(168,159,201,.4);
+        box-shadow: 0 0 60px rgba(139,92,246,.4), 0 0 120px rgba(34,211,238,.15);
+        transform: scale(.85);
+        transition: transform .35s cubic-bezier(.2,1.4,.4,1);
+    }
+    .detail.show .detail-card{ transform: scale(1); }
+    .detail-card .big-name{
+        font-family:'Orbitron', sans-serif;
+        font-weight:900;
+        font-size: 26px;
+        background: linear-gradient(90deg, var(--cyan), var(--pink));
+        -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .detail-card .big-rel{
+        margin-top:10px; font-size:14px; color:var(--muted); letter-spacing:.5px;
+    }
+    .detail-card .close{
+        margin-top: 26px;
+        display:inline-block;
+        font-family:'Orbitron', sans-serif;
+        font-size:11px; letter-spacing:2px;
+        color: var(--bg);
+        background: linear-gradient(90deg, var(--cyan), var(--violet));
+        border:none; border-radius:999px;
+        padding:10px 22px;
+        cursor:pointer;
+    }
 
-        h1 {
-            color: #fff;
-            text-shadow: 0 0 10px #03ffca;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #8a76a4, #da0e7f);
-            color: #fff;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 20px;
-            display: inline-block;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            font-weight: bold;
-            box-shadow: 0 0 15px rgba(218, 14, 127, 0.5);
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.1);
-            background: #03ffca;
-            color: #000;
-        }
-
-        .section {
-            margin-top: 50px;
-            display: none;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .list-box {
-            width: 80%;
-            text-align: left;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #03ffca;
-        }
-
-        h2 {
-            color: #03ffca;
-            border-bottom: 2px solid #da0e7f;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        @media (max-width: 600px) {
-            header { font-size: 18px; padding: 15px; }
-            .list-box { width: 90%; }
-        }
-    </style>
+    @media (prefers-reduced-motion: reduce){
+        .orbit{ animation: none; }
+    }
+</style>    
 </head>
 <body>
 
-    <header>Tərlanın Sistemi</header>
+<canvas id="bg-canvas"></canvas>
 
-    <div class="hero">
-        <h1>[3D Məlumat Mərkəzi]</h1>
-        <p>Sürətli və Təmiz Giriş</p>
-        <a href="3d.html" class="btn">PORTALA GİRİŞ</a>
-        <br>
-        <button class="btn" onclick="toggleFamily()">Ailəmi Görmək</button>
-    </div>
+<header class="hero">
+  <p class="eyebrow">Tərlanın Sistemi // Portal Aktiv</p>
+  <h1>AİLƏ KAİNATI</h1>
+  <p class="sub">27 ulduz, bir qalaktika. Klik et, kim olduğunu gör.</p>
+</header>
 
-    <div class="section" id="familySection">
-        <div class="list-box">
-            <h2>Ailə və Qohumlar</h2>
-            <ol style="color: #eee;">
-                <li>Nigar(Anam)</li><li>İlqar(Atam)</li><li><span style="color: #03ffca; font-weight: bold;">Kənan(Qardaşım)</span></li>
-                <li>Şükran(Bacım)</li><li>Sənan(Qardaşım)</li><li>Afət(Bibim)</li><li>Hökümə</li><li>Gülzar(Nənəm)</li>
-                <li>Sabir(Babam)</li><li>Əsli(Nənəm)</li><li>Məhəmməd(Babam)</li><li>Əkbər(Babam)</li><li>Yaqut(Nənəm)</li><li>Sayalı(Xalam)</li><li>Aynur(Xalam)</li>
-                <li>Süleyman(Dayım)</li><li>Ələkbər(Dayım)</li><li>Zəminə(Xalam D.D)</li><li>Aytən(Xalam D.D)</li><li>Nunuş(Xalam)</li><li>Emil(Dayım D.D)</li><li>Gülşən(Xalam Qızı)</li>
-                <li>Xəyal(Xalam oğlu)</li><li>İslam(Xalam Oğlu)</li><li>Mələk(Dayım Qızı)</li><li>Fidan(Xalam Qızı)</li><li>Ayxan(Dayım Oğlu)</li>
-            </ol>
-        </div>
-    </div>
+<div class="scene-wrap">
+  <div class="orbit" id="orbit"></div>
+</div>
 
-    <script>
-        function toggleFamily() {
-            var section = document.getElementById("familySection");
-            if (section.style.display === "flex") {
-                section.style.opacity = "0";
-                setTimeout(() => { section.style.display = "none"; }, 500);
-            } else {
-                section.style.display = "flex";
-                setTimeout(() => { section.style.opacity = "1"; }, 10);
-            }
-        }
-    </script>
+<div class="detail" id="detail">
+  <div class="detail-card">
+    <div class="big-name" id="detailName"></div>
+    <div class="big-rel" id="detailRel"></div>
+    <button class="close" onclick="closeDetail()">BAĞLA</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============ DATA ============ */
+const family = [
+  ["Nigar","Anam"], ["İlqar","Atam"], ["Kənan","Qardaşım"], ["Şükran","Bacım"],
+  ["Sənan","Qardaşım"], ["Afət","Bibim"], ["Hökümə",""], ["Gülzar","Nənəm"],
+  ["Sabir","Babam"], ["Əsli","Nənəm"], ["Məhəmməd","Babam"], ["Əkbər","Babam"],
+  ["Yaqut","Nənəm"], ["Sayalı","Xalam"], ["Aynur","Xalam"], ["Süleyman","Dayım"],
+  ["Ələkbər","Dayım"], ["Zəminə","Xalam D.D"], ["Aytən","Xalam D.D"], ["Nunuş","Xalam"],
+  ["Emil","Dayım D.D"], ["Gülşən","Xalam Qızı"], ["Xəyal","Xalam oğlu"], ["İslam","Xalam Oğlu"],
+  ["Mələk","Dayım Qızı"], ["Fidan","Xalam Qızı"], ["Ayxan","Dayım Oğlu"]
+];
+
+/* ============ CSS 3D ORBIT OF FAMILY CARDS ============ */
+const orbit = document.getElementById('orbit');
+const radius = 340;
+const n = family.length;
+family.forEach((person, i) => {
+  const angle = (360 / n) * i;
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+  card.innerHTML = `
+    <div class="dot"></div>
+    <div class="name">${person[0]}</div>
+    <div class="rel">${person[1] || 'Ailə Üzvü'}</div>
+  `;
+  card.addEventListener('click', () => openDetail(person[0], person[1]));
+  orbit.appendChild(card);
+});
+
+function openDetail(name, rel){
+  document.getElementById('detailName').textContent = name;
+  document.getElementById('detailRel').textContent = rel || 'Ailə Üzvü';
+  document.getElementById('detail').classList.add('show');
+  orbit.classList.add('paused');
+}
+function closeDetail(){
+  document.getElementById('detail').classList.remove('show');
+  orbit.classList.remove('paused');
+}
+
+/* drag to rotate manually */
+let isDragging = false, lastX = 0, currentRotation = 0, dragRotation = 0;
+const wrap = document.querySelector('.scene-wrap');
+wrap.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; orbit.style.animationPlayState='paused'; });
+window.addEventListener('pointerup', () => { isDragging = false; });
+window.addEventListener('pointermove', e => {
+  if(!isDragging) return;
+  const delta = e.clientX - lastX;
+  lastX = e.clientX;
+  dragRotation += delta * 0.3;
+  orbit.style.transform = `rotateY(${dragRotation}deg)`;
+});
+
+/* ============ THREE.JS SPACE BACKGROUND ============ */
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.z = 60;
+
+// starfield
+function makeStars(count, spread, size, color, opacity){
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  for(let i=0;i<count;i++){
+    positions[i*3]   = (Math.random()-0.5) * spread;
+    positions[i*3+1] = (Math.random()-0.5) * spread;
+    positions[i*3+2] = (Math.random()-0.5) * spread;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const mat = new THREE.PointsMaterial({ color, size, transparent:true, opacity, depthWrite:false, blending: THREE.AdditiveBlending });
+  return new THREE.Points(geo, mat);
+}
+const starsFar = makeStars(1800, 1400, 1.1, 0xffffff, 0.6);
+const starsNear = makeStars(500, 700, 1.8, 0x22d3ee, 0.7);
+const starsPink = makeStars(300, 900, 1.6, 0xf472b6, 0.5);
+scene.add(starsFar, starsNear, starsPink);
+
+// glowing portal core
+const coreGeo = new THREE.IcosahedronGeometry(11, 1);
+const coreMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe:true, transparent:true, opacity:0.55 });
+const core = new THREE.Mesh(coreGeo, coreMat);
+scene.add(core);
+
+const coreGeo2 = new THREE.IcosahedronGeometry(7.5, 1);
+const coreMat2 = new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe:true, transparent:true, opacity:0.5 });
+const core2 = new THREE.Mesh(coreGeo2, coreMat2);
+scene.add(core2);
+
+const glowGeo = new THREE.SphereGeometry(5.2, 32, 32);
+const glowMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent:true, opacity:0.18 });
+const glow = new THREE.Mesh(glowGeo, glowMat);
+scene.add(glow);
+
+// mouse parallax
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', e => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  core.rotation.y += 0.0022;
+  core.rotation.x += 0.0011;
+  core2.rotation.y -= 0.0016;
+  core2.rotation.x += 0.0009;
+  starsFar.rotation.y += 0.00012;
+  starsNear.rotation.y -= 0.00022;
+  starsPink.rotation.y += 0.00017;
+
+  camera.position.x += (mouseX * 14 - camera.position.x) * 0.03;
+  camera.position.y += (-mouseY * 10 - camera.position.y) * 0.03;
+  camera.lookAt(scene.position);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 </body>
-</html>
+</html>   
