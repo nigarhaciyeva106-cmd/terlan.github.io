@@ -6,162 +6,203 @@ layout: null
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tərlanın Saytı</title>
-<link rel="preconnect"  href="https://fonts.googleapis.com">
+<title>Ailə Portalı — Tərlanın 3D Dünyası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-    :root{
-        --bg: #05030c;
-        --violet: #8b5cf6;
-        --cyan: #22d3ee;
-        --pink: #f472b6;
-        --text: #f2eefc;
-        --muted: #a89fc9;
-    }
-    *{box-sizing:border-box;}
-    html,body{
-        margin:0; padding:0; width:100%; height:100%; overflow:hidden;
-        background: var(--bg);
-        font-family:'Inter', sans-serif;
-        color: var(--text);
-    }
-    #bg-canvas{
-        position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; display:block;
-    }
-    .scene-wrap{
-        position:fixed; inset:0; z-index:1;
-        display:flex; align-items:center; justify-content:center;
-        perspective: 1400px;
-    }
-    header.hero{
-        position:fixed; top:0; left:0; width:100%; z-index:5;
-        text-align:center; padding: 28px 20px 0;
-        pointer-events:none;
-    }
-    .eyebrow{
-        font-family:'Orbitron', sans-serif;
-        font-size:11px; letter-spacing:5px; text-transform:uppercase;
-        color: var(--cyan);
-        opacity:.85;
-        margin:0 0 6px;
-    }
-    h1{
-        font-family:'Orbitron', sans-serif;
-        font-weight:900;
-        font-size: clamp(22px, 4.5vw, 42px);
-        margin:0;
-        background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--pink));
-        -webkit-background-clip:text;
-        color:transparent;
-        text-shadow: 0 0 40px rgba(139,92,246,.35);
-        letter-spacing:1px;
-        background-clip:text;
-    }
-    .sub{
-        font-size:13px; color:var(--muted); margin-top:8px; letter-spacing:.3px;
-    }
-    .orbit{
-        position:relative;
-        width: 1px; height: 1px;
-        transform-style: preserve-3d;
-        animation: spin 60s linear infinite;
-    }
-    .orbit.paused{ animation-play-state: paused; }
-    @keyframes spin{
-        from{ transform: rotateY(0deg); }
-        to{ transform: rotateY(360deg); }
-    }
-    .card{
-        position:absolute;
-        top:-46px; left:-72px;
-        width:144px; height:92px;
-        border-radius:14px;
-        background: linear-gradient(160deg, rgba(139,92,246,.16), rgba(34,211,238,.08));
-        border:1px solid rgba(168,159,201,.35);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        display:flex; flex-direction:column; align-items:center; justify-content:center;
-        text-align:center;
-        padding:8px;
-        cursor:pointer;
-        pointer-events:all;
-        transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
-        backface-visibility: hidden;
-    }
-    .card:hover{
-        border-color: var(--cyan);
-        box-shadow: 0 0 28px rgba(34,211,238,.45), 0 0 60px rgba(139,92,246,.25);
-        background: linear-gradient(160deg, rgba(139,92,246,.3), rgba(34,211,238,.18))
-    }
-    .card .name{
-        font-family:'Orbitron', sans-serif;
-        font-weight:700;
-        font-size:14px;
-        color: var(--text);
-        text-shadow: 0 0 12px rgba(255,255,255,.25);
-    }
-    .card .rel{
-        font-size:10.5px;
-        color: var(--muted);
-        margin-top:4px;
-        letter-spacing:.4px;
-    }
-    .card .dot{
-        width:6px; height:6px; border-radius:50%;
-        background: var(--pink);
-        box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
-        margin-bottom:6px;
-    }
+  :root{
+    --bg: #05030c;
+    --violet: #8b5cf6;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --text: #f2eefc;
+    --muted: #a89fc9;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; width:100%; height:100%; overflow:hidden;
+    background: var(--bg);
+    font-family:'Inter', sans-serif;
+    color: var(--text);
+  }
+  #bg-canvas{
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; display:block;
+  }
+  .scene-wrap{
+    position:fixed; inset:0; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective: 1400px;
+  }
+  header.hero{
+    position:fixed; top:0; left:0; width:100%; z-index:5;
+    text-align:center; padding: 28px 20px 0;
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'Orbitron', sans-serif;
+    font-size:11px; letter-spacing:5px; text-transform:uppercase;
+    color: var(--cyan);
+    opacity:.85;
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size: clamp(22px, 4.5vw, 42px);
+    margin:0;
+    background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow: 0 0 40px rgba(139,92,246,.35);
+    letter-spacing:1px;
+  }
+  .sub{
+    font-size:13px; color:var(--muted); margin-top:8px; letter-spacing:.3px;
+  }
+  .orbit{
+    position:relative;
+    width: 1px; height: 1px;
+    transform-style: preserve-3d;
+    animation: spin 60s linear infinite;
+  }
+  .orbit.paused{ animation-play-state: paused; }
+  @keyframes spin{
+    from{ transform: rotateY(0deg); }
+    to{ transform: rotateY(360deg); }
+  }
+  .card{
+    position:absolute;
+    top:-46px; left:-72px;
+    width:144px; height:92px;
+    border-radius:14px;
+    background: linear-gradient(160deg, rgba(139,92,246,.16), rgba(34,211,238,.08));
+    border:1px solid rgba(168,159,201,.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:8px;
+    cursor:pointer;
+    pointer-events:all;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+    backface-visibility: hidden;
+  }
+  .card:hover{
+    border-color: var(--cyan);
+    box-shadow: 0 0 28px rgba(34,211,238,.45), 0 0 60px rgba(139,92,246,.25);
+    background: linear-gradient(160deg, rgba(139,92,246,.3), rgba(34,211,238,.18));
+  }
+  .card .name{
+    font-family:'Orbitron', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color: var(--text);
+    text-shadow: 0 0 12px rgba(255,255,255,.25);
+  }
+  .card .rel{
+    font-size:10.5px;
+    color: var(--muted);
+    margin-top:4px;
+    letter-spacing:.4px;
+  }
+  .card .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--pink);
+    box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
+    margin-bottom:6px;
+  }
 
-    .detail{
-        position:fixed; z-index:20; inset:0;
-        display:flex; align-items:center; justify-content:center;
-        background: rgba(2,1,8,.72);
-        backdrop-filter: blur(4px);
-        opacity:0; pointer-events:none;
-        transition: opacity .3s ease;
-    }
-    .detail.show{ opacity:1; pointer-events:all; }
-    .detail-card{
-        width:min(340px, 86vw);
-        border-radius:20px;
-        padding: 34px 28px;
-        text-align:center;
-        background: linear-gradient(160deg, rgba(139,92,246,.22), rgba(244,114,182,.1));
-        border:1px solid rgba(168,159,201,.4);
-        box-shadow: 0 0 60px rgba(139,92,246,.4), 0 0 120px rgba(34,211,238,.15);
-        transform: scale(.85);
-        transition: transform .35s cubic-bezier(.2,1.4,.4,1);
-    }
-    .detail.show .detail-card{ transform: scale(1); }
-    .detail-card .big-name{
-        font-family:'Orbitron', sans-serif;
-        font-weight:900;
-        font-size: 26px;
-        background: linear-gradient(90deg, var(--cyan), var(--pink));
-        -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-    .detail-card .big-rel{
-        margin-top:10px; font-size:14px; color:var(--muted); letter-spacing:.5px;
-    }
-    .detail-card .close{
-        margin-top: 26px;
-        display:inline-block;
-        font-family:'Orbitron', sans-serif;
-        font-size:11px; letter-spacing:2px;
-        color: var(--bg);
-        background: linear-gradient(90deg, var(--cyan), var(--violet));
-        border:none; border-radius:999px;
-        padding:10px 22px;
-        cursor:pointer;
-    }
+  .detail{
+    position:fixed; z-index:20; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(2,1,8,.72);
+    backdrop-filter: blur(4px);
+    opacity:0; pointer-events:none;
+    transition: opacity .3s ease;
+  }
+  .detail.show{ opacity:1; pointer-events:all; }
+  .detail-card{
+    width:min(340px, 86vw);
+    border-radius:20px;
+    padding: 34px 28px;
+    text-align:center;
+    background: linear-gradient(160deg, rgba(139,92,246,.22), rgba(244,114,182,.1));
+    border:1px solid rgba(168,159,201,.4);
+    box-shadow: 0 0 60px rgba(139,92,246,.4), 0 0 120px rgba(34,211,238,.15);
+    transform: scale(.85);
+    transition: transform .35s cubic-bezier(.2,1.4,.4,1);
+  }
+  .detail.show .detail-card{ transform: scale(1); }
+  .detail-card .big-name{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size: 26px;
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .detail-card .big-rel{
+    margin-top:10px; font-size:14px; color:var(--muted); letter-spacing:.5px;
+  }
+  .detail-card .close{
+    margin-top: 26px;
+    display:inline-block;
+    font-family:'Orbitron', sans-serif;
+    font-size:11px; letter-spacing:2px;
+    color: var(--bg);
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    border:none; border-radius:999px;
+    padding:10px 22px;
+    cursor:pointer;
+  }
 
-    @media (max-width: 600px) {
-    .scene-wrap { perspective: 800px; } 
-}
-</style>    
+  @media (prefers-reduced-motion: reduce){
+    .orbit{ animation: none; }
+  }
+
+  .loader{
+    position:fixed; inset:0; z-index:100;
+    background: var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .8s ease, visibility .8s ease;
+  }
+  .loader.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .loader-inner{ text-align:center; width:min(320px, 80vw); }
+  .loader-title{
+    font-family:'Orbitron', sans-serif; font-weight:900; letter-spacing:2px;
+    font-size:20px; margin-bottom:18px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .loader-status{
+    font-size:12.5px; color:var(--muted); letter-spacing:.4px; margin-bottom:16px;
+    min-height:16px;
+  }
+  .loader-bar{
+    width:100%; height:3px; border-radius:999px; background: rgba(168,159,201,.2);
+    overflow:hidden;
+  }
+  .loader-fill{
+    height:100%; width:0%;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    box-shadow: 0 0 12px var(--cyan);
+    transition: width .3s ease;
+  }
+  .loader-percent{
+    margin-top:10px; font-family:'Orbitron', sans-serif; font-size:11px; color:var(--cyan); letter-spacing:1px;
+  }
+</style>
 </head>
 <body>
+
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-title">AİLƏ KAİNATI</div>
+    <div class="loader-status" id="loaderStatus">Ulduzlar yaradılır...</div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+    <div class="loader-percent" id="loaderPercent">0%</div>
+  </div>
+</div>
 
 <canvas id="bg-canvas"></canvas>
 
@@ -185,7 +226,7 @@ layout: null
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ============ DATA ============ */
+    
 const family = [
   ["Nigar","Anam"], ["İlqar","Atam"], ["Kənan","Qardaşım"], ["Şükran","Bacım"],
   ["Sənan","Qardaşım"], ["Afət","Bibim"], ["Hökümə",""], ["Gülzar","Nənəm"],
@@ -196,7 +237,6 @@ const family = [
   ["Mələk","Dayım Qızı"], ["Fidan","Xalam Qızı"], ["Ayxan","Dayım Oğlu"]
 ];
 
-/* ============ CSS 3D ORBIT OF FAMILY CARDS ============ */
 const orbit = document.getElementById('orbit');
 const radius = 340;
 const n = family.length;
@@ -225,31 +265,19 @@ function closeDetail(){
   orbit.classList.remove('paused');
 }
 
-let isDragging = false, lastX = 0, dragRotation = 0, hasDragged = false;
+/* drag to rotate manually */
+let isDragging = false, lastX = 0, currentRotation = 0, dragRotation = 0;
 const wrap = document.querySelector('.scene-wrap');
-wrap.addEventListener('pointerdown', e => {
-  isDragging = true;
-  hasDragged = false;
-  lastX = e.clientX;
-});
-window.addEventListener('pointerup', () => {
-  isDragging = false;
-});
+wrap.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; orbit.style.animationPlayState='paused'; });
+window.addEventListener('pointerup', () => { isDragging = false; });
 window.addEventListener('pointermove', e => {
   if(!isDragging) return;
   const delta = e.clientX - lastX;
   lastX = e.clientX;
-  if(Math.abs(delta) > 1){
-    if(!hasDragged){
-      hasDragged = true;
-      orbit.style.animation = 'none';
-    }
-    dragRotation += delta * 0.3;
-    orbit.style.transform = `rotateY(${dragRotation}deg)`;
-  }
+  dragRotation += delta * 0.3;
+  orbit.style.transform = `rotateY(${dragRotation}deg)`;
 });
-    
-/* ============ THREE.JS SPACE BACKGROUND ============ */
+
 const canvas = document.getElementById('bg-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -257,7 +285,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
-camera.position.z = 60;
+camera.position.z = 900;
+camera.position.x = 45;
+camera.position.y = -25;
 
 // starfield
 function makeStars(count, spread, size, color, opacity){
@@ -300,6 +330,8 @@ window.addEventListener('mousemove', e => {
   mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 });
 
+let introDone = false;
+
 function animate(){
   requestAnimationFrame(animate);
   core.rotation.y += 0.0022;
@@ -310,8 +342,10 @@ function animate(){
   starsNear.rotation.y -= 0.00022;
   starsPink.rotation.y += 0.00017;
 
-  camera.position.x += (mouseX * 14 - camera.position.x) * 0.03;
-  camera.position.y += (-mouseY * 10 - camera.position.y) * 0.03;
+  if(introDone){
+    camera.position.x += (mouseX * 14 - camera.position.x) * 0.03;
+    camera.position.y += (-mouseY * 10 - camera.position.y) * 0.03;
+  }
   camera.lookAt(scene.position);
 
   renderer.render(scene, camera);
@@ -323,6 +357,69 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+function startCameraFlythrough(){
+  const duration = 2600;
+  const startTime = performance.now();
+  const startPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+  const endPos = { x: 0, y: 0, z: 60 };
+
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+  function flyStep(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = easeOutCubic(t);
+    camera.position.x = startPos.x + (endPos.x - startPos.x) * eased + Math.sin(t * Math.PI * 4) * (1 - eased) * 6;
+    camera.position.y = startPos.y + (endPos.y - startPos.y) * eased;
+    camera.position.z = startPos.z + (endPos.z - startPos.z) * eased;
+
+    if(t < 1){
+      requestAnimationFrame(flyStep);
+    } else {
+      introDone = true;
+    }
+  }
+  requestAnimationFrame(flyStep);
+}
+
+const loaderStatus = document.getElementById('loaderStatus');
+const loaderFill = document.getElementById('loaderFill');
+const loaderPercent = document.getElementById('loaderPercent');
+const loaderEl = document.getElementById('loader');
+
+const loadingSteps = [
+  "Ulduzlar yaradılır...",
+  "Portal aktivləşdirilir...",
+  "Ailə axtarılır...",
+  "Kainat qurulur...",
+  "Giriş açılır..."
+];
+
+let progress = 0;
+let stepIndex = 0;
+loaderStatus.textContent = loadingSteps[0];
+
+const loadingInterval = setInterval(() => {
+  progress += Math.random() * 12 + 4;
+  if(progress >= 100) progress = 100;
+
+  loaderFill.style.width = progress + '%';
+  loaderPercent.textContent = Math.floor(progress) + '%';
+
+  const newStepIndex = Math.min(loadingSteps.length - 1, Math.floor((progress / 100) * loadingSteps.length));
+  if(newStepIndex !== stepIndex){
+    stepIndex = newStepIndex;
+    loaderStatus.textContent = loadingSteps[stepIndex];
+  }
+
+  if(progress >= 100){
+    clearInterval(loadingInterval);
+    setTimeout(() => {
+      loaderEl.classList.add('hide');
+      startCameraFlythrough();
+    }, 400);
+  }
+}, 220);
 </script>
 </body>
-</html>   
+</html>
