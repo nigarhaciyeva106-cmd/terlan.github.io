@@ -1,1099 +1,508 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Ailə Kainatı</title>
-
+<title>Ailə Kainatı — Tərlanın 3D Dünyası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
-
-:root {
+  :root{
     --bg: #05030c;
     --violet: #8b5cf6;
     --cyan: #22d3ee;
     --pink: #f472b6;
     --text: #f2eefc;
     --muted: #a89fc9;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; width:100%; height:100%; overflow:hidden;
     background: var(--bg);
-    font-family: 'Inter', sans-serif;
+    font-family:'Inter', sans-serif;
     color: var(--text);
-    overflow-x: hidden;
-}
-
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    display: block;
-}
-
-.section {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.hero {
-    text-align: center;
-    z-index: 10;
-}
-
-.hero h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(40px, 6vw, 72px);
-    font-weight: 900;
-    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 50px rgba(34, 211, 238, .3);
-}
-
-.scroll-text {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+  }
+  #bg-canvas{
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; display:block;
+  }
+  .scene-wrap{
+    position:fixed; inset:0; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective: 1400px;
+  }
+  header.hero{
+    position:fixed; top:0; left:0; width:100%; z-index:5;
+    text-align:center; padding: 28px 20px 0;
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'Orbitron', sans-serif;
+    font-size:11px; letter-spacing:5px; text-transform:uppercase;
     color: var(--cyan);
-    animation: float 2s infinite;
-}
-
-@keyframes float {
-    0% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, 12px); }
-    100% { transform: translate(-50%, 0); }
-}
-
-.planet-title {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Orbitron';
-    font-size: 40px;
-    font-weight: 800;
-    text-shadow: 0 0 30px rgba(255, 255, 255, .3);
-    z-index: 20;
-}
-
-.planet-desc {
-    position: absolute;
-    top: 140px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    color: var(--muted);
-    z-index: 20;
-}
-
-.orbit-screen {
-    position: relative;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.scene-wrap {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1500px;
-    z-index: 5;
-}
-
-.orbit {
-    position: relative;
-    width: 1px;
-    height: 1px;
+    opacity:.85;
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size: clamp(22px, 4.5vw, 42px);
+    margin:0;
+    background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow: 0 0 40px rgba(139,92,246,.35);
+    letter-spacing:1px;
+  }
+  .sub{
+    font-size:13px; color:var(--muted); margin-top:8px; letter-spacing:.3px;
+  }
+  .orbit{
+    position:relative;
+    width: 1px; height: 1px;
     transform-style: preserve-3d;
     animation: spin 60s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
-}
-
-.card {
-    position: absolute;
-    top: -46px;
-    left: -72px;
-    width: 145px;
-    height: 92px;
-    border-radius: 14px;
-    background: linear-gradient(160deg, rgba(139, 92, 246, .18), rgba(34, 211, 238, .08));
-    border: 1px solid rgba(255, 255, 255, .2);
-    backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: .35s;
-}
-
-.card:hover {
-    transform: scale(1.1);
+  }
+  .orbit.paused{ animation-play-state: paused; }
+  @keyframes spin{
+    from{ transform: rotateY(0deg); }
+    to{ transform: rotateY(360deg); }
+  }
+  .card{
+    position:absolute;
+    top:-46px; left:-72px;
+    width:144px; height:92px;
+    border-radius:14px;
+    background: linear-gradient(160deg, rgba(139,92,246,.16), rgba(34,211,238,.08));
+    border:1px solid rgba(168,159,201,.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:8px;
+    cursor:pointer;
+    pointer-events:all;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+    backface-visibility: hidden;
+  }
+  .card:hover{
     border-color: var(--cyan);
-    box-shadow: 0 0 30px rgba(34, 211, 238, .5), 0 0 70px rgba(139, 92, 246, .3);
-}
+    box-shadow: 0 0 28px rgba(34,211,238,.45), 0 0 60px rgba(139,92,246,.25);
+    background: linear-gradient(160deg, rgba(139,92,246,.3), rgba(34,211,238,.18));
+  }
+  .card .name{
+    font-family:'Orbitron', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color: var(--text);
+    text-shadow: 0 0 12px rgba(255,255,255,.25);
+  }
+  .card .rel{
+    font-size:10.5px;
+    color: var(--muted);
+    margin-top:4px;
+    letter-spacing:.4px;
+  }
+  .card .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--pink);
+    box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
+    margin-bottom:6px;
+  }
 
-.detail {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, .82);
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    pointer-events: none;
-    transition: .3s;
-    z-index: 50;
-}
-
-.detail.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.detail-card {
-    width: min(430px, 90vw);
-    padding: 40px;
-    border-radius: 25px;
-    background: linear-gradient(160deg, rgba(139, 92, 246, .25), rgba(34, 211, 238, .08));
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, .2);
-}
-
-.avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 42px;
-    font-family: 'Orbitron';
-    background: linear-gradient(160deg, var(--violet), var(--cyan));
-    margin-bottom: 20px;
-}
-
-.close {
-    margin-top: 25px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
+  .detail{
+    position:fixed; z-index:20; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(2,1,8,.86);
+    backdrop-filter: blur(6px);
+    opacity:0; pointer-events:none;
+    transition: opacity .3s ease;
+  }
+  .detail.show{ opacity:1; pointer-events:all; }
+  .detail-card{
+    width:min(420px, 88vw);
+    border-radius:26px;
+    padding: 48px 32px 38px;
+    text-align:center;
+    background: linear-gradient(160deg, rgba(139,92,246,.2), rgba(244,114,182,.08));
+    border:1px solid rgba(168,159,201,.4);
+    box-shadow: 0 0 70px rgba(139,92,246,.4), 0 0 140px rgba(34,211,238,.15);
+    transform: scale(.85);
+    transition: transform .35s cubic-bezier(.2,1.4,.4,1);
+  }
+  .detail.show .detail-card{ transform: scale(1); }
+  .avatar-circle{
+    width:104px; height:104px;
+    margin: 0 auto 22px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(160deg, rgba(139,92,246,.35), rgba(34,211,238,.2));
+    border:1.5px solid rgba(255,255,255,.25);
+    box-shadow: 0 0 40px rgba(139,92,246,.55), 0 0 80px rgba(34,211,238,.3), inset 0 0 30px rgba(255,255,255,.08);
+    position:relative;
+  }
+  .avatar-circle::after{
+    content:'';
+    position:absolute; inset:-6px;
+    border-radius:50%;
+    border:1px solid rgba(34,211,238,.35);
+  }
+  .avatar-letter{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size:40px;
+    background: linear-gradient(160deg, var(--cyan), var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .meet-label{
+    font-family:'Orbitron', sans-serif;
+    font-size:11px; letter-spacing:5px; text-transform:uppercase;
+    color: var(--cyan); opacity:.8;
+    margin-bottom:10px;
+  }
+  .detail-card .big-name{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size: 30px;
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .detail-card .big-rel{
+    margin-top:10px; font-size:14px; color:var(--muted); letter-spacing:.5px;
+  }
+  .meet-divider{
+    width:44px; height:2px; margin:22px auto;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    border-radius:2px; opacity:.7;
+  }
+  .detail-card .close{
+    margin-top: 8px;
+    display:inline-block;
+    font-family:'Orbitron', sans-serif;
+    font-size:11px; letter-spacing:2px;
+    color: var(--bg);
     background: linear-gradient(90deg, var(--cyan), var(--violet));
-    font-family: 'Orbitron';
-}
+    border:none; border-radius:999px;
+    padding:10px 22px;
+    cursor:pointer;
+  }
+  .meet-nav-btn{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:48px; height:48px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(139,92,246,.15);
+    border:1px solid rgba(168,159,201,.4);
+    color: var(--text);
+    font-family:'Orbitron', sans-serif; font-size:18px;
+    cursor:pointer;
+    transition:.25s;
+    z-index:21;
+  }
+  .meet-nav-btn:hover{
+    background: rgba(139,92,246,.35);
+    border-color: var(--cyan);
+    box-shadow: 0 0 24px rgba(34,211,238,.4);
+  }
+  .meet-nav-btn.prev{ left: 4%; }
+  .meet-nav-btn.next{ right: 4%; }
+  @media (max-width: 640px){
+    .meet-nav-btn{ width:40px; height:40px; font-size:15px; }
+    .meet-nav-btn.prev{ left: 2%; }
+    .meet-nav-btn.next{ right: 2%; }
+  }
 
+  @media (prefers-reduced-motion: reduce){
+    .orbit{ animation: none; }
+  }
+
+  .loader{
+    position:fixed; inset:0; z-index:100;
+    background: var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .8s ease, visibility .8s ease;
+  }
+  .loader.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .loader-inner{ text-align:center; width:min(320px, 80vw); }
+  .loader-title{
+    font-family:'Orbitron', sans-serif; font-weight:900; letter-spacing:2px;
+    font-size:20px; margin-bottom:18px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .loader-status{
+    font-size:12.5px; color:var(--muted); letter-spacing:.4px; margin-bottom:16px;
+    min-height:16px;
+  }
+  .loader-bar{
+    width:100%; height:3px; border-radius:999px; background: rgba(168,159,201,.2);
+    overflow:hidden;
+  }
+  .loader-fill{
+    height:100%; width:0%;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    box-shadow: 0 0 12px var(--cyan);
+    transition: width .3s ease;
+  }
+  .loader-percent{
+    margin-top:10px; font-family:'Orbitron', sans-serif; font-size:11px; color:var(--cyan); letter-spacing:1px;
+  }
 </style>
-
 </head>
-
 <body>
+
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-title">AİLƏ KAİNATI</div>
+    <div class="loader-status" id="loaderStatus">Ulduzlar yaradılır...</div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+    <div class="loader-percent" id="loaderPercent">0%</div>
+  </div>
+</div>
 
 <canvas id="bg-canvas"></canvas>
 
-<section class="section">
-    <div class="hero">
-        <h1>AİLƏ KAİNATI</h1>
-        <p>Scroll et və kainatda səyahətə başla</p>
-    </div>
-    <div class="scroll-text">SCROLL</div>
-</section>
+<header class="hero">
+  <p class="eyebrow">Tərlanın Sistemi // Portal Aktiv</p>
+  <h1>AİLƏ KAİNATI</h1>
+  <p class="sub">27 ulduz, bir qalaktika. Klik et, kim olduğunu gör.</p>
+</header>
 
-<section class="section">
-    <div class="planet-title">Planet 1</div>
-    <div class="planet-desc">Mavi planetə yaxınlaşırıq...</div>
-</section>
-
-<section class="section">
-    <div class="planet-title">Planet 2</div>
-    <div class="planet-desc">Yeni qalaktikaya keçid...</div>
-</section>
-
-<section class="section">
-    <div class="planet-title">Qara Dəlik</div>
-    <div class="planet-desc">Hadisələr üfüqünə daxil oluruq...</div>
-</section>
-
-<section class="orbit-screen">
-    <div class="scene-wrap">
-        <div class="orbit" id="orbit"></div>
-    </div>
-</section>
+<div class="scene-wrap">
+  <div class="orbit" id="orbit"></div>
+</div>
 
 <div class="detail" id="detail">
-    <div class="detail-card">
-        <div class="avatar" id="avatar"></div>
-        <h2 id="personName"></h2>
-        <p id="personRole"></p>
-        <button class="close">Bağla</button>
-    </div>
+  <button class="meet-nav-btn prev" id="prevBtn" aria-label="Əvvəlki">←</button>
+  <div class="detail-card">
+    <div class="meet-label">Tanış Ol</div>
+    <div class="avatar-circle"><div class="avatar-letter" id="detailAvatar"></div></div>
+    <div class="big-name" id="detailName"></div>
+    <div class="big-rel" id="detailRel"></div>
+    <div class="meet-divider"></div>
+    <button class="close" onclick="closeDetail()">BAĞLA</button>
+  </div>
+  <button class="meet-nav-btn next" id="nextBtn" aria-label="Növbəti">→</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
 <script>
-// ===============================
-// THREE.JS SCENE
-// ===============================
+/* ============ DATA ============ */
+const family = [
+  ["Nigar","Anam"], ["İlqar","Atam"], ["Kənan","Qardaşım"], ["Şükran","Bacım"],
+  ["Sənan","Qardaşım"], ["Afət","Bibim"], ["Hökümə",""], ["Gülzar","Nənəm"],
+  ["Sabir","Babam"], ["Əsli","Nənəm"], ["Məhəmməd","Babam"], ["Əkbər","Babam"],
+  ["Yaqut","Nənəm"], ["Sayalı","Xalam"], ["Aynur","Xalam"], ["Süleyman","Dayım"],
+  ["Ələkbər","Dayım"], ["Zəminə","Xalam D.D"], ["Aytən","Xalam D.D"], ["Nunuş","Xalam"],
+  ["Emil","Dayım D.D"], ["Gülşən","Xalam Qızı"], ["Xəyal","Xalam oğlu"], ["İslam","Xalam Oğlu"],
+  ["Mələk","Dayım Qızı"], ["Fidan","Xalam Qızı"], ["Ayxan","Dayım Oğlu"]
+];
 
-const canvas = document.getElementById("bg-canvas");
-
-const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true,
-    alpha: true
+/* ============ CSS 3D ORBIT OF FAMILY CARDS ============ */
+const orbit = document.getElementById('orbit');
+const radius = 340;
+const n = family.length;
+family.forEach((person, i) => {
+  const angle = (360 / n) * i;
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+  card.innerHTML = `
+    <div class="dot"></div>
+    <div class="name">${person[0]}</div>
+    <div class="rel">${person[1] || 'Ailə Üzvü'}</div>
+  `;
+  card.addEventListener('click', () => openDetail(i));
+  orbit.appendChild(card);
 });
 
+let currentIndex = 0;
+
+function renderDetail(index){
+  const person = family[index];
+  document.getElementById('detailAvatar').textContent = person[0].charAt(0);
+  document.getElementById('detailName').textContent = person[0];
+  document.getElementById('detailRel').textContent = person[1] || 'Ailə Üzvü';
+  currentIndex = index;
+}
+
+function openDetail(index){
+  renderDetail(index);
+  document.getElementById('detail').classList.add('show');
+  orbit.classList.add('paused');
+}
+function closeDetail(){
+  document.getElementById('detail').classList.remove('show');
+  orbit.classList.remove('paused');
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  renderDetail((currentIndex - 1 + family.length) % family.length);
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  renderDetail((currentIndex + 1) % family.length);
+});
+
+/* drag to rotate manually */
+let isDragging = false, lastX = 0, currentRotation = 0, dragRotation = 0;
+const wrap = document.querySelector('.scene-wrap');
+wrap.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; orbit.style.animationPlayState='paused'; });
+window.addEventListener('pointerup', () => { isDragging = false; });
+window.addEventListener('pointermove', e => {
+  if(!isDragging) return;
+  const delta = e.clientX - lastX;
+  lastX = e.clientX;
+  dragRotation += delta * 0.3;
+  orbit.style.transform = `rotateY(${dragRotation}deg)`;
+});
+
+/* ============ THREE.JS SPACE BACKGROUND ============ */
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.z = 900;
+camera.position.x = 45;
+camera.position.y = -25;
 
-const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    5000
-);
-
-camera.position.set(0, 0, 1200);
-
-// ===============================
-// LIGHTS
-// ===============================
-
-scene.add(new THREE.AmbientLight(0xffffff, .5));
-
-const light = new THREE.PointLight(0xffffff, 2);
-
-light.position.set(200, 200, 400);
-
-scene.add(light);
-
-// ===============================
-// STARS
-// ===============================
-
-function createStars(count) {
-    const geo = new THREE.BufferGeometry();
-    const positions = [];
-
-    for (let i = 0; i < count; i++) {
-        positions.push(
-            (Math.random() - .5) * 4000,
-            (Math.random() - .5) * 4000,
-            (Math.random() - .5) * 4000
-        );
-    }
-
-    geo.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(positions, 3)
-    );
-
-    const mat = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 2,
-        transparent: true,
-        opacity: .8
-    });
-
-    return new THREE.Points(geo, mat);
+// starfield
+function makeStars(count, spread, size, color, opacity){
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  for(let i=0;i<count;i++){
+    positions[i*3]   = (Math.random()-0.5) * spread;
+    positions[i*3+1] = (Math.random()-0.5) * spread;
+    positions[i*3+2] = (Math.random()-0.5) * spread;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const mat = new THREE.PointsMaterial({ color, size, transparent:true, opacity, depthWrite:false, blending: THREE.AdditiveBlending });
+  return new THREE.Points(geo, mat);
 }
+const starsFar = makeStars(1800, 1400, 1.1, 0xffffff, 0.6);
+const starsNear = makeStars(500, 700, 1.8, 0x22d3ee, 0.7);
+const starsPink = makeStars(300, 900, 1.6, 0xf472b6, 0.5);
+scene.add(starsFar, starsNear, starsPink);
 
-const stars = createStars(3000);
+// glowing portal core
+const coreGeo = new THREE.IcosahedronGeometry(11, 1);
+const coreMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe:true, transparent:true, opacity:0.55 });
+const core = new THREE.Mesh(coreGeo, coreMat);
+scene.add(core);
 
-scene.add(stars);
+const coreGeo2 = new THREE.IcosahedronGeometry(7.5, 1);
+const coreMat2 = new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe:true, transparent:true, opacity:0.5 });
+const core2 = new THREE.Mesh(coreGeo2, coreMat2);
+scene.add(core2);
 
-// ===============================
-// PLANET 1
-// ===============================
+const glowGeo = new THREE.SphereGeometry(5.2, 32, 32);
+const glowMat = new THREE.MeshBasicMaterial({ color: 0xf472b6, transparent:true, opacity:0.18 });
+const glow = new THREE.Mesh(glowGeo, glowMat);
+scene.add(glow);
 
-const planet1 = new THREE.Mesh(
-    new THREE.SphereGeometry(120, 64, 64),
-    new THREE.MeshStandardMaterial({
-        color: 0x22d3ee,
-        emissive: 0x113355,
-        roughness: .8
-    })
-);
-
-planet1.position.set(-260, 40, -200);
-scene.add(planet1);
-
-const ring1 = new THREE.Mesh(
-    new THREE.TorusGeometry(170, 5, 24, 200),
-    new THREE.MeshBasicMaterial({ color: 0xffffff })
-);
-
-ring1.rotation.x = Math.PI / 2;
-planet1.add(ring1);
-
-// ===============================
-// PLANET 2
-// ===============================
-
-const planet2 = new THREE.Mesh(
-    new THREE.SphereGeometry(90, 64, 64),
-    new THREE.MeshStandardMaterial({
-        color: 0xf472b6,
-        emissive: 0x552244,
-        roughness: .9
-    })
-);
-
-planet2.position.set(300, -100, -650);
-scene.add(planet2);
-
-// ===============================
-// BLACK HOLE
-// ===============================
-
-const blackHole = new THREE.Group();
-
-const holeRing = new THREE.Mesh(
-    new THREE.TorusGeometry(120, 30, 30, 200),
-    new THREE.MeshBasicMaterial({ color: 0x8b5cf6 })
-);
-
-holeRing.rotation.x = Math.PI / 2;
-blackHole.add(holeRing);
-
-const core = new THREE.Mesh(
-    new THREE.SphereGeometry(70, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0x000000 })
-);
-
-blackHole.add(core);
-
-blackHole.position.set(0, 0, -1200);
-scene.add(blackHole);
-
-// ===============================
-// RESIZE
-// ===============================
-
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+// mouse parallax
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', e => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 });
 
-// Animasiya dövrü
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
-
-// =====================================
-// AİLƏ MƏLUMATLARI
-// =====================================
-
-const family = [
-
-["Nigar","Anam"],
-["İlqar","Atam"],
-["Kənan","Qardaşım"],
-["Şükran","Bacım"],
-["Sənan","Qardaşım"],
-
-["Afət","Bibim"],
-["Hökümə",""],
-["Gülzar","Nənəm"],
-["Sabir","Babam"],
-["Əsli","Nənəm"],
-
-["Məhəmməd","Babam"],
-["Əkbər","Babam"],
-["Yaqut","Nənəm"],
-
-["Sayalı","Xalam"],
-["Aynur","Xalam"],
-
-["Süleyman","Dayım"],
-["Ələkbər","Dayım"],
-
-["Zəminə","Xalam D.D"],
-["Aytən","Xalam D.D"],
-
-["Nunuş","Xalam"],
-
-["Emil","Dayım D.D"],
-
-["Gülşən","Xalam Qızı"],
-["Xəyal","Xalam Oğlu"],
-["İslam","Xalam Oğlu"],
-
-["Mələk","Dayım Qızı"],
-["Fidan","Xalam Qızı"],
-["Ayxan","Dayım Oğlu"]
-
-];
-
-// =====================================
-// ORBIT
-// =====================================
-
-const orbit = document.getElementById("orbit");
-
-const radius = 340;
-
-family.forEach((person,index)=>{
-
-const angle=(360/family.length)*index;
-
-const card=document.createElement("div");
-
-card.className="card";
-
-card.style.transform=
-`rotateY(${angle}deg)
- translateZ(${radius}px)`;
-
-card.innerHTML=`
-
-<div class="dot"></div>
-
-<div class="name">
-
-${person[0]}
-
-</div>
-
-<div class="rel">
-
-${person[1]||"Ailə üzvü"}
-
-</div>
-
-`;
-
-card.addEventListener("click",()=>{
-
-openPerson(index);
-
-});
-
-orbit.appendChild(card);
-
-});
-
-// =====================================
-// MODAL
-// =====================================
-
-const detail=document.getElementById("detail");
-
-const avatar=document.getElementById("avatar");
-
-const personName=document.getElementById("personName");
-
-const personRole=document.getElementById("personRole");
-
-const closeBtn=document.querySelector(".close");
-
-let currentIndex=0;
-
-function openPerson(index){
-
-currentIndex=index;
-
-avatar.innerHTML=
-
-family[index][0].charAt(0);
-
-personName.innerHTML=
-
-family[index][0];
-
-personRole.innerHTML=
-
-family[index][1]||"Ailə üzvü";
-
-detail.classList.add("show");
-
-orbit.style.animationPlayState="paused";
-
-}
-
-function closeDetail(){
-
-detail.classList.remove("show");
-
-orbit.style.animationPlayState="running";
-
-}
-
-closeBtn.onclick=closeDetail;
-
-detail.addEventListener("click",(e)=>{
-
-if(e.target===detail){
-
-closeDetail();
-
-}
-
-});
-
-// =====================================
-// ORBIT DRAG
-// =====================================
-
-let dragging=false;
-
-let startX=0;
-
-let rotateY=0;
-
-window.addEventListener("pointerdown",(e)=>{
-
-dragging=true;
-
-startX=e.clientX;
-
-orbit.style.animation="none";
-
-});
-
-window.addEventListener("pointerup",()=>{
-
-dragging=false;
-
-});
-
-window.addEventListener("pointermove",(e)=>{
-
-if(!dragging)return;
-
-rotateY+=(e.clientX-startX)*0.25;
-
-startX=e.clientX;
-
-orbit.style.transform=
-
-`rotateY(${rotateY}deg)`;
-
-});
-
-// =====================================
-// KARTLARIN PARILTISI
-// =====================================
-
-setInterval(()=>{
-
-document.querySelectorAll(".card")
-
-.forEach((card,i)=>{
-
-card.style.boxShadow=
-
-`0 0 ${10+Math.random()*30}px
-
-rgba(34,211,238,.35)`;
-
-});
-
-},800);
-  
-// =====================================
-// SCROLL SƏYAHƏTİ
-// Planet 1 -> Planet 2 -> Qara Dəlik -> Orbit
-// =====================================
-
-const sections=document.querySelectorAll(".section");
-
-window.addEventListener("scroll",scrollJourney);
-
-scrollJourney();
-
-function scrollJourney(){
-
-const maxScroll=
-
-document.body.scrollHeight-
-
-window.innerHeight;
-
-const progress=
-
-window.scrollY/maxScroll;
-
-// ===================
-// PLANET 1
-// ===================
-
-if(progress<0.25){
-
-const t=progress/.25;
-
-camera.position.x=
-
--250+(250*t);
-
-camera.position.y=
-
-40-(40*t);
-
-camera.position.z=
-
-1200-(700*t);
-
-camera.lookAt(
-
-planet1.position
-
-);
-
-}
-
-// ===================
-// PLANET 2
-// ===================
-
-else if(progress<0.50){
-
-const t=(progress-.25)/.25;
-
-camera.position.x=
-
-0+(260*t);
-
-camera.position.y=
-
-0-(80*t);
-
-camera.position.z=
-
-500-(650*t);
-
-camera.lookAt(
-
-planet2.position
-
-);
-
-}
-
-// ===================
-// BLACK HOLE
-// ===================
-
-else if(progress<0.75){
-
-const t=(progress-.50)/.25;
-
-camera.position.x=
-
-260-(260*t);
-
-camera.position.y=
-
--80+(80*t);
-
-camera.position.z=
-
--150-(950*t);
-
-camera.lookAt(
-
-blackHole.position
-
-);
-
-}
-
-// ===================
-// ORBIT
-// ===================
-
-else{
-
-const t=(progress-.75)/.25;
-
-camera.position.x=0;
-
-camera.position.y=0;
-
-camera.position.z=
-
--1100+
-
-(1160*t);
-
-camera.lookAt(
-
-0,
-0,
-0
-
-);
-
-orbit.style.opacity=1;
-
-}
-
-}
-
-// =====================================
-// PLANET ANİMASİYASI
-// =====================================
-
-function animatePlanets(){
-
-planet1.rotation.y+=0.002;
-
-planet1.rotation.x+=0.0005;
-
-planet2.rotation.y-=0.003;
-
-planet2.rotation.z+=0.001;
-
-ring1.rotation.z+=0.004;
-
-holeRing.rotation.z+=0.05;
-
-blackHole.rotation.y+=0.003;
-
-}
-
-// =====================================
-// ULDUZLAR
-// =====================================
-
-function animateStars(){
-
-stars.rotation.y+=0.00015;
-
-stars.rotation.x+=0.00005;
-
-}
-
-// =====================================
-// CAMERA SHAKE
-// (Qara dəliyə yaxın)
-// =====================================
-
-function blackHoleShake(){
-
-const maxScroll=
-
-document.body.scrollHeight-
-
-window.innerHeight;
-
-const p=
-
-window.scrollY/maxScroll;
-
-if(
-
-p>.55 &&
-
-p<.74
-
-){
-
-camera.position.x+=
-
-(Math.random()-.5)*2;
-
-camera.position.y+=
-
-(Math.random()-.5)*2;
-
-}
-
-}
-
-// =====================================
-// ORBIT FADE
-// =====================================
-
-function orbitFade(){
-
-const maxScroll=
-
-document.body.scrollHeight-
-
-window.innerHeight;
-
-const p=
-
-window.scrollY/maxScroll;
-
-if(p>.72){
-
-orbit.style.opacity=
-
-Math.min(
-
-1,
-
-(p-.72)/.12
-
-);
-
-}else{
-
-orbit.style.opacity=0;
-
-}
-
-}
-
-// =====================================
-// PARALLAX
-// =====================================
-
-let mouseX=0;
-
-let mouseY=0;
-
-window.addEventListener("mousemove",(e)=>{
-
-mouseX=
-
-(e.clientX/
-
-window.innerWidth-.5)*2;
-
-mouseY=
-
-(e.clientY/
-
-window.innerHeight-.5)*2;
-
-});
-
-function cameraParallax(){
-
-camera.position.x+=
-
-(mouseX*10-camera.position.x)
-
-*.02;
-
-camera.position.y+=
-
-(-mouseY*6-camera.position.y)
-
-*.02;
-
-}
-
-  // =====================================
-// MAIN ANIMATION LOOP
-// =====================================
-
-const clock = new THREE.Clock();
+let introDone = false;
 
 function animate(){
+  requestAnimationFrame(animate);
+  core.rotation.y += 0.0022;
+  core.rotation.x += 0.0011;
+  core2.rotation.y -= 0.0016;
+  core2.rotation.x += 0.0009;
+  starsFar.rotation.y += 0.00012;
+  starsNear.rotation.y -= 0.00022;
+  starsPink.rotation.y += 0.00017;
 
-requestAnimationFrame(animate);
+  if(introDone){
+    camera.position.x += (mouseX * 14 - camera.position.x) * 0.03;
+    camera.position.y += (-mouseY * 10 - camera.position.y) * 0.03;
+  }
+  camera.lookAt(scene.position);
 
-// Planetlər
-animatePlanets();
-
-// Ulduzlar
-animateStars();
-
-// Orbit görünməsi
-orbitFade();
-
-// Kamera titrəməsi
-blackHoleShake();
-
-// Mouse parallax
-cameraParallax();
-
-// Qara dəlik
-holeRing.rotation.z += 0.01;
-
-core.rotation.y += 0.02;
-
-core.rotation.x += 0.01;
-
-// Orbit yavaş fırlansın
-
-orbit.style.transform += "";
-
-// Render
-
-renderer.render(scene,camera);
-
+  renderer.render(scene, camera);
 }
-
 animate();
 
-// =====================================
-// SCROLL START
-// =====================================
-
-window.scrollTo({
-
-top:0,
-
-behavior:"instant"
-
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// =====================================
-// SCROLL END EFFECT
-// =====================================
+/* ============ CAMERA FLYTHROUGH INTRO ============ */
+function startCameraFlythrough(){
+  const duration = 2600;
+  const startTime = performance.now();
+  const startPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+  const endPos = { x: 0, y: 0, z: 60 };
 
-window.addEventListener("scroll",()=>{
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 
-const max=
+  function flyStep(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = easeOutCubic(t);
+    camera.position.x = startPos.x + (endPos.x - startPos.x) * eased + Math.sin(t * Math.PI * 4) * (1 - eased) * 6;
+    camera.position.y = startPos.y + (endPos.y - startPos.y) * eased;
+    camera.position.z = startPos.z + (endPos.z - startPos.z) * eased;
 
-document.body.scrollHeight-
-
-window.innerHeight;
-
-const p=
-
-window.scrollY/max;
-
-if(p>.97){
-
-document.body.style.background=
-
-"#000";
-
+    if(t < 1){
+      requestAnimationFrame(flyStep);
+    } else {
+      introDone = true;
+    }
+  }
+  requestAnimationFrame(flyStep);
 }
 
-});
+/* ============ LOADING SEQUENCE ============ */
+const loaderStatus = document.getElementById('loaderStatus');
+const loaderFill = document.getElementById('loaderFill');
+const loaderPercent = document.getElementById('loaderPercent');
+const loaderEl = document.getElementById('loader');
 
-// =====================================
-// DOUBLE CLICK
-// Orbit mərkəzinə qayıt
-// =====================================
+const loadingSteps = [
+  "Ulduzlar yaradılır...",
+  "Portal aktivləşdirilir...",
+  "Ailə axtarılır...",
+  "Kainat qurulur...",
+  "Giriş açılır..."
+];
 
-window.addEventListener(
+let progress = 0;
+let stepIndex = 0;
+loaderStatus.textContent = loadingSteps[0];
 
-"dblclick",
+const loadingInterval = setInterval(() => {
+  progress += Math.random() * 12 + 4;
+  if(progress >= 100) progress = 100;
 
-()=>{
+  loaderFill.style.width = progress + '%';
+  loaderPercent.textContent = Math.floor(progress) + '%';
 
-window.scrollTo({
+  const newStepIndex = Math.min(loadingSteps.length - 1, Math.floor((progress / 100) * loadingSteps.length));
+  if(newStepIndex !== stepIndex){
+    stepIndex = newStepIndex;
+    loaderStatus.textContent = loadingSteps[stepIndex];
+  }
 
-top:
-
-document.body.scrollHeight,
-
-behavior:"smooth"
-
-});
-
-}
-
-// =====================================
-// FPS LIMIT
-// =====================================
-
-let fps=60;
-
-let then=performance.now();
-
-const interval=1000/fps;
-
-function renderLoop(now){
-
-requestAnimationFrame(renderLoop);
-
-const delta=
-
-now-then;
-
-if(delta<interval)return;
-
-then=
-
-now-
-
-(delta%interval);
-
-renderer.render(
-
-scene,
-
-camera
-
-);
-
-}
-
-requestAnimationFrame(
-
-renderLoop
-
-);
-
-// =====================================
-// INTRO
-// =====================================
-
-setTimeout(()=>{
-
-document.querySelector(
-
-".scroll-text"
-
-).innerHTML=
-
-"↓↓ Scroll ↓↓";
-
-},1200);
-
-// =====================================
-// FINISHED
-// =====================================
-
-console.log(
-
-"Ailə Kainatı hazırdır."
-
-);
-  
+  if(progress >= 100){
+    clearInterval(loadingInterval);
+    setTimeout(() => {
+      loaderEl.classList.add('hide');
+      startCameraFlythrough();
+    }, 400);
+  }
+}, 220);
 </script>
-
 </body>
 </html>
