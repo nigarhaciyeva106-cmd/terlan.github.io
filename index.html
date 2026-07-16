@@ -24,7 +24,6 @@
     overflow-x:hidden;
   }
 
-  /* warm ambient background */
   #warmBg{
     position:fixed; inset:0; z-index:0;
     background:
@@ -189,14 +188,22 @@
 
 <div id="warmBg"></div>
 
-<div id="loginOverlay" style="position:fixed; inset:0; z-index:999; background:#faf1e2; display:flex; align-items:center; justify-content:center;">
-  <div style="text-align:center;">
-    <h2 style="font-family:'Playfair Display', serif; color:#4a3324;">Ailə Kainatına Giriş</h2>
-    <input type="password" id="passInput" placeholder="Şifrəni yaz..." style="padding:10px; border-radius:5px; border:1px solid #c8912b;">
-    <button onclick="checkPassword()" style="padding:10px 20px; cursor:pointer;">Giriş</button>
-    <p id="errorMsg" style="color:red;"></p>
-  </div>
-</div>
+<!-- Firebase SDK Başlatıcı -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyB5HJgThTP8L-aq2SEpRhoa80gekVD-uGg",
+    authDomain: "ailakainati.firebaseapp.com",
+    projectId: "ailakainati",
+    storageBucket: "ailakainati.firebasestorage.app",
+    messagingSenderId: "268923170773",
+    appId: "1:268923170773:web:a2dfa1bc9457af8a87975c",
+    measurementId: "G-PYYFVSPPGQ"
+  };
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 
 <div class="loader" id="loader">
   <div class="loader-inner">
@@ -232,15 +239,7 @@
 </div>
 
 <script>
-function checkPassword() {
-  const password = document.getElementById('passInput').value;
-  if (password === "12345") { 
-    document.getElementById('loginOverlay').style.display = 'none';
-    startLoaderSequence();
-  } else {
-    document.getElementById('errorMsg').textContent = "Şifrə yanlışdır!";
-  }
-}
+window.onload = startLoaderSequence;
 
 function startLoaderSequence() {
   const loaderStatus = document.getElementById('loaderStatus');
